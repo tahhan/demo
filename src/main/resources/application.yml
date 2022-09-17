@@ -1,0 +1,15 @@
+server:
+  port:8080
+
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/security
+    username: root
+    password: 123456
+
+
+auth:
+  expiration: 604800
+  secret: password
+  header: Authorization
