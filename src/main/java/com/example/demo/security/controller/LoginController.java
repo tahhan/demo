@@ -5,6 +5,7 @@ import com.example.demo.security.domain.request.LoginRequest;
 import com.example.demo.security.domain.common.TokenUtil;
 import com.example.demo.security.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,13 @@ public class LoginController {
     private UserService userService;
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    public LoginController(AuthenticationManager authenticationManager, TokenUtil tokenUtil, UserService userService) {
+        this.authenticationManager = authenticationManager;
+        this.tokenUtil = tokenUtil;
+        this.userService = userService;
+    }
+
     @PostMapping(path = "/")
     public JWTResponse login(@RequestBody LoginRequest loginRequest) {
         final Authentication authentication = authenticationManager.authenticate(
@@ -31,8 +39,7 @@ public class LoginController {
         UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUserName());
         String token = tokenUtil.generateToken(userDetails);
         JWTResponse response = new JWTResponse();
+        response.setToken(token);
         return response;
     }
-
-
 }

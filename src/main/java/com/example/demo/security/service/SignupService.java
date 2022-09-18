@@ -6,6 +6,7 @@ import com.example.demo.security.domain.request.SignupRequest;
 import com.example.demo.security.reposirory.AppRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +21,7 @@ public class SignupService {
         appUser.setFirstName(signupRequest.getFirstName());
         appUser.setLastName(signupRequest.getLastName());
         appUser.setEmail(signupRequest.getEmail());
-        appUser.setPassword(signupRequest.getPassword());
+        appUser.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()));
         appRepository.save(appUser);
         JWTResponse response = new JWTResponse();
         return response;
